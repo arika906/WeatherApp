@@ -11,6 +11,9 @@ import MapKit
 
 class DaysForecastViewController: UIViewController {
 
+    
+    
+    
     //PopUp
     
     @IBOutlet weak var opacityColor: UIVisualEffectView!
@@ -94,7 +97,12 @@ class DaysForecastViewController: UIViewController {
         dayTableView.rowHeight = 150
         print("3254325sdvxcv")
         print( (RequestHandler.shared.dayData as AnyObject))
-        daysInfo = RequestHandler.shared.dayData
+        
+        if let daysInfo = RequestHandler.shared.dayData {
+            self.daysInfo = daysInfo
+        }
+        
+        
         mainView.frame = CGRect(x: 0 , y: 0, width: self.view.frame.width, height: self.view.frame.height)
         // Do any additional setup after loading the view.
     }
@@ -170,12 +178,16 @@ class DaysForecastViewController: UIViewController {
         switch sevenDaysPageSegment.selectedSegmentIndex {
         case 0:
             print(sevenDaysPageSegment.selectedSegmentIndex)
-            //performSegue(withIdentifier: "today", sender: self)
-            dismiss(animated: false, completion: nil)
+            
+            RequestHandler.shared.state = 0
+            performSegue(withIdentifier: "today", sender: self)
+            //dismiss(animated: false, completion: nil)
         case 1:
             print(sevenDaysPageSegment.selectedSegmentIndex)
-            //performSegue(withIdentifier: "today", sender: self)
+            RequestHandler.shared.state = 1
+            performSegue(withIdentifier: "today", sender: self)
         case 2:
+            RequestHandler.shared.state = 2
             print(sevenDaysPageSegment.selectedSegmentIndex)
         default:
             break;
@@ -365,7 +377,11 @@ extension DaysForecastViewController:UITableViewDelegate,UITableViewDataSource {
                 self.locationButton.isHidden = false
                 DispatchQueue.main.async {
                     //LiveWeatherViewController.getWeatherForecast(locValue: coordinate ?? CLLocationCoordinate2DMake(23.7418, 88.4277))
-                    self.daysInfo = RequestHandler.shared.dayData
+                    if let daysInfo = RequestHandler.shared.dayData {
+                        self.daysInfo = daysInfo
+                    }
+                    
+                    
                     self.viewDidLoad()
                     self.dayTableView.reloadData()
                 }
