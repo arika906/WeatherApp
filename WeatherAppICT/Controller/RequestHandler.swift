@@ -8,15 +8,110 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 let baseUrl = "https://api.darksky.net"
 class RequestHandler{
     
     static let shared = RequestHandler()
-    
-    var dayData:[Data?]
+    var gpsLocUpdate = false
+    var searchRequest = false
+    var placeName:String?
+    var coordinate:CLLocationCoordinate2D?
+    var state = -1
+    var dayData:[Data?]?
         = []
+    var hourlyData:[DataForHourly]? = []
     //private init(){}
+    
+    
+    func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double) {
+        
+        var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
+        //let lat: Double = Double("\(pdblLatitude)")!
+        //21.228124
+        //let lon: Double = Double("\(pdblLongitude)")!
+        //72.833770
+        let ceo: CLGeocoder = CLGeocoder()
+        center.latitude = pdblLatitude
+        center.longitude = pdblLongitude
+
+        let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
+
+        //var address = ""
+        
+        ceo.reverseGeocodeLocation(loc, completionHandler:
+            {(placemarks, error) in
+                if (error != nil)
+                {
+                    print("reverse geodcode fail: \(error!.localizedDescription)")
+                }
+                let pm = placemarks! as [CLPlacemark]
+
+                if pm.count > 0 {
+                    let pm = placemarks![0]
+//                    print("c",pm.country)
+//                    print("loc",pm.locality)
+//                    print("su",pm.subLocality)
+//                    print("th",pm.thoroughfare)
+//                    print("po",pm.postalCode)
+//                    print("st",pm.subThoroughfare)
+                    //var addressString : String = ""
+//                    if pm.subLocality != nil {
+//                        addressString = addressString + pm.subLocality! + ", "
+//                    }
+//                    if pm.thoroughfare != nil {
+//                        addressString = addressString + pm.thoroughfare! + ", "
+//                    }
+                    
+                    if let locality = pm.locality{
+                        self.placeName = locality
+                    }
+                    
+//                    if pm.locality != nil {
+//                        //addressString = addressString + pm.locality! + ", "
+//                        address = pm.locality!
+//                    }
+//                    if pm.country != nil {
+//                        addressString = addressString + pm.country! + ", "
+//                    }
+//                    if pm.postalCode != nil {
+//                        addressString = addressString + pm.postalCode! + " "
+//                    }
+
+
+                    //address = addressString
+                    //print(addressString)
+              }
+        })
+
+        
+    }
+
+    
+    
+    func getImageName(temp:Int)->String{
+        
+        switch temp {
+            
+        case -1000...00:
+            return "snow"
+        case 1...10:
+            return "cloud"
+        case 11...14:
+            return "PartlyCloud"
+        case 15...18:
+            return "MostlyCloud"
+        case 19...30:
+            return "Clear"
+        case 31...45:
+            return "Sunny"
+        default:
+            return "Rainy"
+        }
+        
+    }
+    
     
     func getResponseModel(responseModel:Any)->Any{
         

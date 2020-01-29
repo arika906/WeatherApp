@@ -10,6 +10,7 @@
 		5381CA46B6D2BC04B565E3F8 /* Pods_WeatherAppICT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50085564AC5E48F7629F0341 /* Pods_WeatherAppICT.framework */; };
 		C80EA8AF23B13F0600EE9126 /* DataForMinutely.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80EA8AE23B13F0600EE9126 /* DataForMinutely.swift */; };
 		C80EA8B123B141DE00EE9126 /* DataForHourly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80EA8B023B141DD00EE9126 /* DataForHourly.swift */; };
+		C83152B123E03EB30067AB5B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C83152B023E03EB30067AB5B /* SearchViewController.swift */; };
 		C8667D7A23C31300002E8FF6 /* DaysForecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8667D7923C31300002E8FF6 /* DaysForecastViewController.swift */; };
 		C89FF04523B0D0CA0025C9C9 /* Minutely.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89FF03E23B0D0CA0025C9C9 /* Minutely.swift */; };
 		C89FF04623B0D0CA0025C9C9 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = C89FF03F23B0D0CA0025C9C9 /* Data.swift */; };
@@ -36,6 +37,7 @@
 		C3DC6F5E7E1F4E4A4426137A /* Pods-WeatherAppICT.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherAppICT.release.xcconfig"; path = "Target Support Files/Pods-WeatherAppICT/Pods-WeatherAppICT.release.xcconfig"; sourceTree = "<group>"; };
 		C80EA8AE23B13F0600EE9126 /* DataForMinutely.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataForMinutely.swift; sourceTree = "<group>"; };
 		C80EA8B023B141DD00EE9126 /* DataForHourly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataForHourly.swift; sourceTree = "<group>"; };
+		C83152B023E03EB30067AB5B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C8667D7923C31300002E8FF6 /* DaysForecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysForecastViewController.swift; sourceTree = "<group>"; };
 		C89FF03E23B0D0CA0025C9C9 /* Minutely.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Minutely.swift; sourceTree = "<group>"; };
 		C89FF03F23B0D0CA0025C9C9 /* Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				C8AAA76623AB4F6E000D2A07 /* RequestHandler.swift */,
 				C8A0E70F23C1E61900C6A34B /* DaysTableViewCell.swift */,
 				C8667D7923C31300002E8FF6 /* DaysForecastViewController.swift */,
+				C83152B023E03EB30067AB5B /* SearchViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				C8EC2E3823AB4DD1008A491A /* AppDelegate.swift in Sources */,
 				C89FF04823B0D0CA0025C9C9 /* RootClass.swift in Sources */,
 				C8AAA76723AB4F6E000D2A07 /* RequestHandler.swift in Sources */,
+				C83152B123E03EB30067AB5B /* SearchViewController.swift in Sources */,
 				C8FA162C23DCC44800D8C49F /* TodayTomorrowCollectionViewCell.swift in Sources */,
 				C89FF04923B0D0CA0025C9C9 /* Flags.swift in Sources */,
 				C8EC2E3A23AB4DD1008A491A /* SceneDelegate.swift in Sources */,

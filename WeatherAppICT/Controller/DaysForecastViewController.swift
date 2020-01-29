@@ -11,6 +11,10 @@ import MapKit
 
 class DaysForecastViewController: UIViewController {
 
+    
+    @IBOutlet weak var locName: UILabel!
+    
+    
     //PopUp
     
     @IBOutlet weak var opacityColor: UIVisualEffectView!
@@ -81,6 +85,10 @@ class DaysForecastViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         popOverView(status: true)
         
+        if let location = RequestHandler.shared.placeName{
+            self.locName.text = location
+        }
+        
         
         searchLocation.isHidden = true
         
@@ -94,7 +102,12 @@ class DaysForecastViewController: UIViewController {
         dayTableView.rowHeight = 150
         print("3254325sdvxcv")
         print( (RequestHandler.shared.dayData as AnyObject))
-        daysInfo = RequestHandler.shared.dayData
+        
+        if let daysInfo = RequestHandler.shared.dayData {
+            self.daysInfo = daysInfo
+        }
+        
+        
         mainView.frame = CGRect(x: 0 , y: 0, width: self.view.frame.width, height: self.view.frame.height)
         // Do any additional setup after loading the view.
     }
@@ -170,12 +183,18 @@ class DaysForecastViewController: UIViewController {
         switch sevenDaysPageSegment.selectedSegmentIndex {
         case 0:
             print(sevenDaysPageSegment.selectedSegmentIndex)
-            //performSegue(withIdentifier: "today", sender: self)
-            dismiss(animated: false, completion: nil)
+            
+            RequestHandler.shared.state = 0
+            RequestHandler.shared.searchRequest = false
+            performSegue(withIdentifier: "today", sender: self)
+            //dismiss(animated: false, completion: nil)
         case 1:
             print(sevenDaysPageSegment.selectedSegmentIndex)
-            //performSegue(withIdentifier: "today", sender: self)
+            RequestHandler.shared.state = 1
+            RequestHandler.shared.searchRequest = false
+            performSegue(withIdentifier: "today", sender: self)
         case 2:
+            RequestHandler.shared.state = 2
             print(sevenDaysPageSegment.selectedSegmentIndex)
         default:
             break;
@@ -228,7 +247,10 @@ extension DaysForecastViewController:UITableViewDelegate,UITableViewDataSource {
                              
                              cell.tempDescription.text = daysInfo[indexPath.row]?.summary
                              cell.tempRange.text = "\(Int( daysInfo[indexPath.row]?.temperatureLow ?? 0 ))°C- \(Int( daysInfo[indexPath.row]?.temperatureHigh ?? 0  ))°C"
-                             
+            
+                            
+            cell.tempIcon.image = UIImage(named: RequestHandler.shared.getImageName(temp: Int( daysInfo[indexPath.row]?.temperatureLow ?? 0 )))
+            
                              let timestamp: NSNumber = daysInfo[indexPath.row]?.time as NSNumber? ?? 1579248000 as NSNumber
                              print(timestamp)  // 1524654473.108564
                              let exactDate = NSDate(timeIntervalSince1970: TimeInterval(truncating: timestamp))
@@ -311,6 +333,8 @@ extension DaysForecastViewController:UITableViewDelegate,UITableViewDataSource {
             
             popUpTempDescription.text = "\(daysInfo[indexPath.row]?.summary ?? "")"
             popUpTempRange.text = "\(Int( daysInfo[indexPath.row]?.temperatureLow ?? 0 ))°C- \(Int( daysInfo[indexPath.row]?.temperatureHigh ?? 0  ))°C"
+            popUpTempIcon.image = UIImage(named: RequestHandler.shared.getImageName(temp: Int( daysInfo[indexPath.row]?.temperatureLow ?? 0 )))
+            popUpPredict.text = "\(daysInfo[indexPath.row]?.moonPhase ?? 0)"
             
             let timestamp: NSNumber = daysInfo[indexPath.row]?.time as NSNumber? ?? 1579248000 as NSNumber
             print(timestamp)  // 1524654473.108564
@@ -365,7 +389,11 @@ extension DaysForecastViewController:UITableViewDelegate,UITableViewDataSource {
                 self.locationButton.isHidden = false
                 DispatchQueue.main.async {
                     //LiveWeatherViewController.getWeatherForecast(locValue: coordinate ?? CLLocationCoordinate2DMake(23.7418, 88.4277))
-                    self.daysInfo = RequestHandler.shared.dayData
+                    if let daysInfo = RequestHandler.shared.dayData {
+                        self.daysInfo = daysInfo
+                    }
+                    
+                    
                     self.viewDidLoad()
                     self.dayTableView.reloadData()
                 }
