@@ -183,16 +183,20 @@ class DaysForecastViewController: UIViewController {
         switch sevenDaysPageSegment.selectedSegmentIndex {
         case 0:
             print(sevenDaysPageSegment.selectedSegmentIndex)
-            
-            RequestHandler.shared.state = 0
+            sevenDaysPageSegment.selectedSegmentIndex = 0
+            //view.isHidden = true
+            //RequestHandler.shared.state = 0
             RequestHandler.shared.searchRequest = false
-            performSegue(withIdentifier: "today", sender: self)
+            performSegue(withIdentifier: "seg0", sender: self)
             //dismiss(animated: false, completion: nil)
         case 1:
             print(sevenDaysPageSegment.selectedSegmentIndex)
+            //view.isHidden = true
+            sevenDaysPageSegment.selectedSegmentIndex = 1
             RequestHandler.shared.state = 1
             RequestHandler.shared.searchRequest = false
-            performSegue(withIdentifier: "today", sender: self)
+            performSegue(withIdentifier: "seg1", sender: self)
+            //dismiss(animated: false, completion: nil)
         case 2:
             RequestHandler.shared.state = 2
             print(sevenDaysPageSegment.selectedSegmentIndex)
@@ -204,15 +208,7 @@ class DaysForecastViewController: UIViewController {
     
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }
 

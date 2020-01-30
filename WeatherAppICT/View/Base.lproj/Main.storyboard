@@ -1481,9 +1481,12 @@
                         <outlet property="sevenDaysPageSegment" destination="kuO-qb-wvX" id="MQI-D9-n30"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="today" animates="NO" modalPresentationStyle="fullScreen" id="ppx-ij-6Yn"/>
                         <segue destination="xOl-It-wab" kind="presentation" identifier="sevenTOsearch" id="L05-ey-2PS"/>
+                        <segue destination="8ec-Wi-9Fo" kind="unwind" identifier="seg0" animates="NO" unwindAction="unwindForSegment1WithSegue:" id="MWx-aj-L8v"/>
+                        <segue destination="8ec-Wi-9Fo" kind="unwind" identifier="seg1" animates="NO" unwindAction="unwindForSegment2WithSegue:" id="FTV-29-jbi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vec-kV-hgx" sceneMemberID="firstResponder"/>
+                <exit id="8ec-Wi-9Fo" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2821.739130434783" y="70.982142857142847"/>
         </scene>
@@ -1618,8 +1621,8 @@
         <image name="windmill icon" width="59" height="107"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="bIo-xO-onk"/>
+        <segue reference="L05-ey-2PS"/>
         <segue reference="6eG-JF-3RO"/>
-        <segue reference="cjB-A7-izE"/>
+        <segue reference="ppx-ij-6Yn"/>
     </inferredMetricsTieBreakers>
 </document>

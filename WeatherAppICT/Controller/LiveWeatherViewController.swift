@@ -90,87 +90,42 @@ class LiveWeatherViewController: UIViewController {
     
     //var count = 0
     var hourlyData:[DataForHourly]? = []
+    var dayData:[Data?]?
+        = [] {
+        didSet {
+            
+            if let dayData = dayData{
+                updateData(currentData: dayData[0]! , dt: dayData[0]!)
+                DispatchQueue.main.async {
+                    self.hourlyCollectionView.reloadData()
+                }
+            }
+            
+        }
+    }
     var hourlyCount:Int?
     let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      // print("loc1111",RequestHandler.shared.placeName)
+      
         segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
         segment.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
         
         
-        // Do any additional setup after loading the view.
-        //RequestHandler.shared.getRequest(Url: "https://api.openweathermap.org/data/2.5/weather?lat=51.50998&lon=-0.1337&APPID=c379e22089661592e59459eca3028a1c")
         
         locationManager.delegate = self
         
-//        if  RequestHandler.shared.coordinate != nil && RequestHandler.shared.gpsLocUpdate == true {
-//            RequestHandler.shared.gpsLocUpdate = false
-//            getWeatherForecast(locValue: RequestHandler.shared.coordinate!)
-//        }
-//
-        
-//        
-        
-//        getAddressFromLatLon(pdblLatitude: 23.8103, withLongitude: 90.4125)
-        
+
         
         if RequestHandler.shared.state == -1 {
             getLocation()
-            //locationSearch()
+            
             if locationManager.location?.coordinate == nil {
                 getLatLonfromIP()
             }
-            
-        }
-        
-        
-        print("req",RequestHandler.shared.searchRequest)
-        
-        if RequestHandler.shared.state == 0 && RequestHandler.shared.searchRequest == false{
-            segment.selectedSegmentIndex = 0
-            print("000")
-            if let globalData = RequestHandler.shared.dayData {
-                updateData(currentData: globalData[0]! , dt: globalData[0]!)
-            }
-            guard let data = RequestHandler.shared.dayData?[0] else {
-            return
-            }
-            
-            guard let currently = RequestHandler.shared.dayData?[0] else {
-            return
-            }
-            self.updateData(currentData: currently, dt: data)
-            DispatchQueue.main.async {
-                self.hourlyCollectionView.reloadData()
-            }
-
-        }
-        
-        if RequestHandler.shared.state == 1 && RequestHandler.shared.searchRequest == false{
-            segment.selectedSegmentIndex = 1
-            print("111")
-            if let globalData = RequestHandler.shared.dayData {
-                updateData(currentData: globalData[1]! , dt: globalData[1]!)
-            }
-            
-            DispatchQueue.main.async {
-                self.hourlyCollectionView.reloadData()
-            }
-        }
-        
-        if RequestHandler.shared.state == 2 && RequestHandler.shared.searchRequest == false{
-            print("333")
-            
-        }
-        
-        if let place = RequestHandler.shared.placeName{
-            //self.locationName.text = place
-            DispatchQueue.main.async {
-                self.locName = place
-            }
+            RequestHandler.shared.state = 5
         }
         
         if RequestHandler.shared.searchRequest {
@@ -183,61 +138,65 @@ class LiveWeatherViewController: UIViewController {
                 getWeatherForecast(locValue: coordinate)
             }
             DispatchQueue.main.async {
+                
                 self.hourlyCollectionView.reloadData()
             }
         }
-        //performSegue(withIdentifier: "days", sender: self)
-        
-//        hourlyCount = hourlyData?.count
-//        hourlyCollectionView.reloadData()
-//        print("hhhhhh",hourlyCount)
-        
-        //print("loc222",RequestHandler.shared.placeName)
-        
-
+   
         
     }
     
+    func refLocation(){
+        if locName == ""{
+            DispatchQueue.main.async {
+                 self.locationName.text = self.locName
+            }
+        }
+        
+       
+    }
     
+    func refreshData(n:Int){
+        if let globalData = RequestHandler.shared.dayData {
+            updateData(currentData: globalData[n]! , dt: globalData[n]!)
+        }
+        
+        DispatchQueue.main.async {
+            self.hourlyCollectionView.reloadData()
+        }
+    }
     
     @IBAction func segmentAction(_ sender: UISegmentedControl) {
         
         switch segment.selectedSegmentIndex {
         case 0:
-            print(segment.selectedSegmentIndex)
-            self.navigationItem.title = "Today"
-            RequestHandler.shared.state = 0
-            if let globalData = RequestHandler.shared.dayData {
-                updateData(currentData: globalData[0]! , dt: globalData[0]!)
-                DispatchQueue.main.async {
-                    self.hourlyCollectionView.reloadData()
-                }
-            }
             
+            RequestHandler.shared.state = 0
+//            if let globalData = RequestHandler.shared.dayData {
+//                updateData(currentData: globalData[0]! , dt: globalData[0]!)
+//                DispatchQueue.main.async {
+//                    self.hourlyCollectionView.reloadData()
+//                }
+//            }
+            refreshData(n: 0)
             
             
         case 1:
-            print(segment.selectedSegmentIndex)
+            
             RequestHandler.shared.state = 1
-            self.navigationItem.title = "Tommorow"
             
-            if let globalData = RequestHandler.shared.dayData {
-                updateData(currentData: globalData[1]! , dt: globalData[1]!)
-                DispatchQueue.main.async {
-                    self.hourlyCollectionView.reloadData()
-                }
-            }
             
+//            if let globalData = RequestHandler.shared.dayData {
+//                updateData(currentData: globalData[1]! , dt: globalData[1]!)
+//                DispatchQueue.main.async {
+//                    self.hourlyCollectionView.reloadData()
+//                }
+//            }
+            refreshData(n: 1)
             
         case 2:
             RequestHandler.shared.state = 2
-            print(segment.selectedSegmentIndex)
-            //            let viewController = DaysForecastViewController()
-            //            viewController.modalPresentationStyle = .fullScreen
-            //            present(viewController, animated: true, completion: nil)
-            //            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            //            let newViewController = storyBoard.instantiateViewController(withIdentifier: "7days") as! DaysForecastViewController
-            //                    self.present(newViewController, animated: false, completion: nil)
+            
             performSegue(withIdentifier: "days", sender: self)
         default:
             break;
@@ -255,7 +214,7 @@ class LiveWeatherViewController: UIViewController {
     
     
     @IBAction func goToSearch(_ sender: UIButton) {
-        print("se3")
+        
         performSegue(withIdentifier: "homeTOsearch", sender: self)
     }
     
@@ -270,7 +229,7 @@ class LiveWeatherViewController: UIViewController {
             getLatLonfromIP()
         }
         
-        print("jbhvh")
+        
     }
     
     func  getWeatherForecast(locValue: CLLocationCoordinate2D){
@@ -287,10 +246,11 @@ class LiveWeatherViewController: UIViewController {
                     let responseModel = try jsonDecoder.decode(RootClass.self, from: data)
                     
                     
-                    if let dailyData = responseModel.daily {
-                        RequestHandler.shared.dayData = dailyData.data
+                    guard let dailyData = responseModel.daily else{
+                        return
                     }
-                    
+                    //self.dayData = dailyData.data
+                    RequestHandler.shared.dayData = dailyData.data
                     if let hourlyData = responseModel.hourly {
                         
                         self.hourlyData = hourlyData.data
@@ -301,46 +261,26 @@ class LiveWeatherViewController: UIViewController {
                         }
                         
                         
-                        //self.hourlyCollectionView.up
-                        print("xyz123123",hourlyData)
+                        
                     }
                     
                     print("Appplegjgfyjhfhtdgtffhdrgdfhygdr ",responseModel )
-                    
+
                     guard let data = responseModel.daily?.data[0] else {
                     return
                     }
+
+
+
+                    self.updateData(currentData: data, dt: data)
                     
-                    guard let currently = responseModel.daily?.data[0] else {
-                    return
-                    }
-                    
-                    
-                    
-                    
-                    self.updateData(currentData: currently, dt: data)
-                    
-                    
-                    if RequestHandler.shared.state == 0 || RequestHandler.shared.state == 1
-                    {
-                        guard let data = responseModel.daily?.data[RequestHandler.shared.state] else {
-                        return
-                        }
-                        
-                        guard let currently = responseModel.daily?.data[RequestHandler.shared.state] else {
-                        return
-                        }
-                        
-                        self.updateData(currentData: currently, dt: data)
-                        
-                    }
-                    
-                    
+    
                    
 
                     DispatchQueue.main.async {
                         
-                        self.locationName.text = RequestHandler.shared.placeName
+                        //self.locName
+                        //self.locationName.text = RequestHandler.shared.placeName
                         self.hourlyCollectionView.reloadData()
                     }
                     print("56456789",responseModel.daily?.data[0]?.temperatureMax ?? "")
@@ -359,6 +299,20 @@ class LiveWeatherViewController: UIViewController {
     
     
     
+    @IBAction func unwindForSegment2(segue: UIStoryboardSegue) {
+        //Insert function to be run upon dismiss of VC2
+        
+        segment.selectedSegmentIndex = 1
+        refreshData(n: 1)
+        
+    }
+    
+    @IBAction func unwindForSegment1(segue: UIStoryboardSegue) {
+        //Insert function to be run upon dismiss of VC2
+        
+        segment.selectedSegmentIndex = 0
+        refreshData(n: 0)
+    }
     
     func updateData(currentData:Data,dt:Data)  {
         
@@ -491,17 +445,14 @@ class LiveWeatherViewController: UIViewController {
       func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double) {
             
             var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
-            //let lat: Double = Double("\(pdblLatitude)")!
-            //21.228124
-            //let lon: Double = Double("\(pdblLongitude)")!
-            //72.833770
+            
             let ceo: CLGeocoder = CLGeocoder()
             center.latitude = pdblLatitude
             center.longitude = pdblLongitude
 
             let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
 
-            //var address = ""
+            
             
             ceo.reverseGeocodeLocation(loc, completionHandler:
                 {(placemarks, error) in
@@ -513,41 +464,27 @@ class LiveWeatherViewController: UIViewController {
 
                     if pm.count > 0 {
                         let pm = placemarks![0]
-//                        print("c",pm.country)
-//                        print("loc",pm.locality)
-//                        print("su",pm.subLocality)
-//                        print("th",pm.thoroughfare)
-//                        print("po",pm.postalCode)
-//                        print("st",pm.subThoroughfare)
-                        //var addressString : String = ""
-    //                    if pm.subLocality != nil {
-    //                        addressString = addressString + pm.subLocality! + ", "
-    //                    }
-    //                    if pm.thoroughfare != nil {
-    //                        addressString = addressString + pm.thoroughfare! + ", "
-    //                    }
+
                         DispatchQueue.main.async {
                             if let locality = pm.locality{
                                 RequestHandler.shared.placeName = locality
                                 self.locName = locality
+                                
+                                if self.locName == nil {
+                                    if let locality = pm.name{
+                                    RequestHandler.shared.placeName = locality
+                                    self.locName = locality
+                                    }
+                                }
+                                
+                                self.refLocation()
                             }
+                            
+                            
                         }
                         
                         
-    //                    if pm.locality != nil {
-    //                        //addressString = addressString + pm.locality! + ", "
-    //                        address = pm.locality!
-    //                    }
-    //                    if pm.country != nil {
-    //                        addressString = addressString + pm.country! + ", "
-    //                    }
-    //                    if pm.postalCode != nil {
-    //                        addressString = addressString + pm.postalCode! + " "
-    //                    }
 
-
-                        //address = addressString
-                        //print(addressString)
                   }
             })
 
@@ -561,13 +498,10 @@ class LiveWeatherViewController: UIViewController {
             
             if let data = data{
                 
-                print("hghhjhfvhf:",data)
                 do {
                     let jsonDecoder = JSONDecoder()
                     let responseModel = try jsonDecoder.decode(Ip.self, from: data)
-                    //print("Appplegjgfyjhfhtdgtffhdrgdfhygdr",responseModel.lat! )
                     
-                    //LiveWeatherViewController.self.getWeatherForecast(locValue: CLLocationCoordinate2DMake(responseModel.lat!, responseModel.lon!))
                     
                     if let city = responseModel.city {
                         RequestHandler.shared.placeName = city
@@ -600,7 +534,7 @@ class LiveWeatherViewController: UIViewController {
         
     }
     
-    
+/*
     func locationSearch(){
         
         let searchRequest = MKLocalSearch.Request()
@@ -622,30 +556,7 @@ class LiveWeatherViewController: UIViewController {
         }
         
     }
-    
-    //    func getCurrentLocationWeather(locValue: CLLocationCoordinate2D){
-    //        RequestHandler.shared.getRequest(Url: "https://api.openweathermap.org/data/2.5/weather?lat=\(Double(locValue.latitude))&lon=\(Double(locValue.longitude))&APPID=c379e22089661592e59459eca3028a1c"){
-    //            data in
-    //
-    //            if let data = data{
-    //                print(data)
-    //                do {
-    //                    let jsonDecoder = JSONDecoder()
-    //                    let responseModel = try jsonDecoder.decode(Json4Swift_Base.self, from: data)
-    //                    print(responseModel )
-    //                } catch {
-    //                    print(error)
-    //                }
-    //            }
-    //
-    //        }
-    //
-    //
-    //
-    //
-    //    }
-    
-    
+*/
 }
 
 
@@ -653,22 +564,9 @@ extension  LiveWeatherViewController:CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D? = manager.location?.coordinate else { return }
-        print("locations = \(String(describing: locValue?.latitude)) \(String(describing: locValue?.longitude))")
-        print("cfgxhjjb",locValue)
-        
-        
-        
-        if let coordinate = locValue {
-            
-            //RequestHandler.shared.coordinate = coordinate
-            
-            getWeatherForecast(locValue: coordinate)
-            DispatchQueue.main.async {
-                self.hourlyCollectionView.reloadData()
-            }
-            
-            
-        }
+ 
+        getWeatherForecast(locValue: locValue!)
+
 
     }
     
@@ -703,9 +601,6 @@ extension  LiveWeatherViewController:UICollectionViewDelegate,UICollectionViewDa
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ttCell", for: indexPath) as! TodayTomorrowCollectionViewCell
         
-        //print("568-----",RequestHandler.shared.hourlyData)
-        
-        //DispatchQueue.main.async {
         if  self.hourlyData?.count != 0{
             if let hourlyData = self.hourlyData {
                     print("56-----",hourlyData)
@@ -714,14 +609,12 @@ extension  LiveWeatherViewController:UICollectionViewDelegate,UICollectionViewDa
                     cell.temp.text = "\(hourlyData[indexPath.row].temperature ?? 20)"
                 cell.tempIcon.image = UIImage(named: RequestHandler.shared.getImageName(temp: Int(hourlyData[indexPath.row].temperature ?? 20)))
                 
-                //cell.probability.image = UIImage(named: RequestHandler.shared.getImageName(temp: Int(hourlyData[indexPath.row].temperature ?? 20)))
                 
                     cell.time.text = self.createDateTime(timestamp: "\(hourlyData[indexPath.row].time ?? 1580138340)")
                     
                     print("ghtrdsa",hourlyData)
                     
-                //}
-                //self.hourlyCollectionView.reloadData()
+                
             }
         }
         else {
@@ -735,8 +628,7 @@ extension  LiveWeatherViewController:UICollectionViewDelegate,UICollectionViewDa
                     
                     print("ghtrdsa",hourlyData)
                     
-                //}
-                //self.hourlyCollectionView.reloadData()
+                
             }
         }
             

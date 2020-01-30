@@ -25,66 +25,66 @@ class RequestHandler{
     //private init(){}
     
     
-    func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double, completionClosure: @escaping  (String) -> ())  {
-        
-        var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
-        //let lat: Double = Double("\(pdblLatitude)")!
-        //21.228124
-        //let lon: Double = Double("\(pdblLongitude)")!
-        //72.833770
-        let ceo: CLGeocoder = CLGeocoder()
-        center.latitude = pdblLatitude
-        center.longitude = pdblLongitude
-
-        let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
-
-        var address = ""
-        
-        ceo.reverseGeocodeLocation(loc, completionHandler:
-            {(placemarks, error) in
-                if (error != nil)
-                {
-                    print("reverse geodcode fail: \(error!.localizedDescription)")
-                }
-                let pm = placemarks! as [CLPlacemark]
-
-                if pm.count > 0 {
-                    let pm = placemarks![0]
-
-                    //var addressString : String = ""
-//                    if pm.subLocality != nil {
-//                        addressString = addressString + pm.subLocality! + ", "
+//    func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double, completionClosure: @escaping  (String) -> ())  {
+//
+//        var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
+//        //let lat: Double = Double("\(pdblLatitude)")!
+//        //21.228124
+//        //let lon: Double = Double("\(pdblLongitude)")!
+//        //72.833770
+//        let ceo: CLGeocoder = CLGeocoder()
+//        center.latitude = pdblLatitude
+//        center.longitude = pdblLongitude
+//
+//        let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
+//
+//        var address = ""
+//
+//        ceo.reverseGeocodeLocation(loc, completionHandler:
+//            {(placemarks, error) in
+//                if (error != nil)
+//                {
+//                    print("reverse geodcode fail: \(error!.localizedDescription)")
+//                }
+//                let pm = placemarks! as [CLPlacemark]
+//
+//                if pm.count > 0 {
+//                    let pm = placemarks![0]
+//
+//                    //var addressString : String = ""
+////                    if pm.subLocality != nil {
+////                        addressString = addressString + pm.subLocality! + ", "
+////                    }
+////                    if pm.thoroughfare != nil {
+////                        addressString = addressString + pm.thoroughfare! + ", "
+////                    }
+//
+//                    if let locality = pm.locality {
+//                        self.placeName = locality
+//                        address = locality
+//                        completionClosure(address)
 //                    }
-//                    if pm.thoroughfare != nil {
-//                        addressString = addressString + pm.thoroughfare! + ", "
-//                    }
-                    
-                    if let locality = pm.locality {
-                        self.placeName = locality
-                        address = locality
-                        completionClosure(address)
-                    }
-                    
-//                    if pm.locality != nil {
-//                        //addressString = addressString + pm.locality! + ", "
-//                        address = pm.locality!
-//                    }
-//                    if pm.country != nil {
-//                        addressString = addressString + pm.country! + ", "
-//                    }
-//                    if pm.postalCode != nil {
-//                        addressString = addressString + pm.postalCode! + " "
-//                    }
-
-
-                    //address = addressString
-                    //print(addressString)
-              }
-        })
-
-//        return address
-        
-    }
+//
+////                    if pm.locality != nil {
+////                        //addressString = addressString + pm.locality! + ", "
+////                        address = pm.locality!
+////                    }
+////                    if pm.country != nil {
+////                        addressString = addressString + pm.country! + ", "
+////                    }
+////                    if pm.postalCode != nil {
+////                        addressString = addressString + pm.postalCode! + " "
+////                    }
+//
+//
+//                    //address = addressString
+//                    //print(addressString)
+//              }
+//        })
+//
+////        return address
+//
+//    }
 
 //    RequestHandler.shared.getAddressFromLatLon(pdblLatitude: 23.8103, withLongitude: 90.4125) { [weak self] (address) in
     //            guard let weakself = self else { return}
