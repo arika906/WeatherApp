@@ -111,10 +111,19 @@ class LiveWeatherViewController: UIViewController {
 //            getWeatherForecast(locValue: RequestHandler.shared.coordinate!)
 //        }
 //
+        
+//        
+        
+//        getAddressFromLatLon(pdblLatitude: 23.8103, withLongitude: 90.4125)
+        
+        
         if RequestHandler.shared.state == -1 {
             getLocation()
             //locationSearch()
-            //getLatLonfromIP()
+            if locationManager.location?.coordinate == nil {
+                getLatLonfromIP()
+            }
+            
         }
         
         
@@ -158,7 +167,10 @@ class LiveWeatherViewController: UIViewController {
         }
         
         if let place = RequestHandler.shared.placeName{
-            self.locationName.text = place
+            //self.locationName.text = place
+            DispatchQueue.main.async {
+                self.locName = place
+            }
         }
         
         if RequestHandler.shared.searchRequest {
@@ -182,7 +194,7 @@ class LiveWeatherViewController: UIViewController {
         
         //print("loc222",RequestHandler.shared.placeName)
         
-        //print("counnt",hourlyData?.count)
+
         
     }
     
@@ -262,7 +274,7 @@ class LiveWeatherViewController: UIViewController {
     }
     
     func  getWeatherForecast(locValue: CLLocationCoordinate2D){
-        RequestHandler.shared.getAddressFromLatLon(pdblLatitude: locValue.latitude, withLongitude: locValue.longitude )
+        getAddressFromLatLon(pdblLatitude: locValue.latitude, withLongitude: locValue.longitude )
         RequestHandler.shared.getRequest(urlExtension: "/forecast/5b56d79fb2d1a41dd81282781fa6bf46/\(Double(locValue.latitude)),\(Double(locValue.longitude))?units=si"){
             data in
             //print("data:", data)
@@ -328,7 +340,7 @@ class LiveWeatherViewController: UIViewController {
 
                     DispatchQueue.main.async {
                         
-                        //self.locationName.text = RequestHandler.shared.placeName
+                        self.locationName.text = RequestHandler.shared.placeName
                         self.hourlyCollectionView.reloadData()
                     }
                     print("56456789",responseModel.daily?.data[0]?.temperatureMax ?? "")
@@ -642,25 +654,22 @@ extension  LiveWeatherViewController:CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D? = manager.location?.coordinate else { return }
         print("locations = \(String(describing: locValue?.latitude)) \(String(describing: locValue?.longitude))")
-        print("cfgxhjjb")
-        //getCurrentLocationWeather(locValue: locValue)
-        //LiveWeatherViewController.getWeatherForecast(locValue: locValue)
-        //getWeatherForecast(locValue: locValue)
+        print("cfgxhjjb",locValue)
+        
+        
+        
         if let coordinate = locValue {
-            //RequestHandler.shared.searchRequest = false
-            //RequestHandler.shared.gpsLocUpdate = true
-            RequestHandler.shared.coordinate = coordinate
-            getAddressFromLatLon(pdblLatitude: coordinate.latitude, withLongitude: coordinate.longitude)
+            
+            //RequestHandler.shared.coordinate = coordinate
+            
             getWeatherForecast(locValue: coordinate)
-            //viewDidLoad()
+            DispatchQueue.main.async {
+                self.hourlyCollectionView.reloadData()
+            }
+            
+            
         }
-        DispatchQueue.main.async {
-            self.hourlyCollectionView.reloadData()
-            //self.locName = RequestHandler.shared.placeName
-//            if let place = RequestHandler.shared.placeName{
-//                self.locationName.text = place
-//            }
-        }
+
     }
     
     

@@ -25,7 +25,7 @@ class RequestHandler{
     //private init(){}
     
     
-    func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double) {
+    func getAddressFromLatLon(pdblLatitude: Double, withLongitude pdblLongitude: Double, completionClosure: @escaping  (String) -> ())  {
         
         var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
         //let lat: Double = Double("\(pdblLatitude)")!
@@ -38,7 +38,7 @@ class RequestHandler{
 
         let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
 
-        //var address = ""
+        var address = ""
         
         ceo.reverseGeocodeLocation(loc, completionHandler:
             {(placemarks, error) in
@@ -50,12 +50,7 @@ class RequestHandler{
 
                 if pm.count > 0 {
                     let pm = placemarks![0]
-//                    print("c",pm.country)
-//                    print("loc",pm.locality)
-//                    print("su",pm.subLocality)
-//                    print("th",pm.thoroughfare)
-//                    print("po",pm.postalCode)
-//                    print("st",pm.subThoroughfare)
+
                     //var addressString : String = ""
 //                    if pm.subLocality != nil {
 //                        addressString = addressString + pm.subLocality! + ", "
@@ -64,8 +59,10 @@ class RequestHandler{
 //                        addressString = addressString + pm.thoroughfare! + ", "
 //                    }
                     
-                    if let locality = pm.locality{
+                    if let locality = pm.locality {
                         self.placeName = locality
+                        address = locality
+                        completionClosure(address)
                     }
                     
 //                    if pm.locality != nil {
@@ -85,10 +82,19 @@ class RequestHandler{
               }
         })
 
+//        return address
         
     }
 
-    
+//    RequestHandler.shared.getAddressFromLatLon(pdblLatitude: 23.8103, withLongitude: 90.4125) { [weak self] (address) in
+    //            guard let weakself = self else { return}
+    //            if address != "" {
+    //                print(address)
+    //                DispatchQueue.main.async {
+    //                    weakself.locationName.text = address
+    //                }
+    //            }
+    //        }
     
     func getImageName(temp:Int)->String{
         
