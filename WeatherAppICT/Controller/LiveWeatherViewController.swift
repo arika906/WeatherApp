@@ -133,8 +133,9 @@ class LiveWeatherViewController: UIViewController {
             
             
             if let coordinate = RequestHandler.shared.coordinate {
-                RequestHandler.shared.searchRequest = false
                 
+                self.locationName.text = RequestHandler.shared.placeName
+                RequestHandler.shared.searchRequest = false
                 getWeatherForecast(locValue: coordinate)
             }
             DispatchQueue.main.async {
@@ -470,7 +471,7 @@ class LiveWeatherViewController: UIViewController {
                                 RequestHandler.shared.placeName = locality
                                 self.locName = locality
                                 
-                                if self.locName == nil {
+                                if self.locName == nil && RequestHandler.shared.searchRequest == false {
                                     if let locality = pm.name{
                                     RequestHandler.shared.placeName = locality
                                     self.locName = locality
@@ -596,6 +597,8 @@ extension  LiveWeatherViewController:UICollectionViewDelegate,UICollectionViewDa
 
         return self.hourlyCount ?? RequestHandler.shared.hourlyData!.count
     }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         

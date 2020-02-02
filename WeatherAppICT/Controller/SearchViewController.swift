@@ -96,17 +96,7 @@ extension SearchViewController:UITableViewDelegate,UITableViewDataSource{
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-        
-//        if let firstVC = presentingViewController as? LiveWeatherViewController {
-//            DispatchQueue.main.async {
-//                firstVC.getWeatherForecast(locValue: RequestHandler.shared.coordinate!)
-//                firstVC.hourlyCollectionView.reloadData()
-//            }
-//        }
-        
-    }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
